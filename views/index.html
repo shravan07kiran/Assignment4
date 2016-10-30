@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <title>Assignment-4</title>
+    <script src=
+    "https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js">
+    </script>
+</head>
+<body>
+    <form>
+        <input type="button" name="score" value="Current Score" id="scoreBtnId" style="display:none">
+        <input type="button" name="addButton" value="Add a question?" id="addQueBtnId" style="display:none"><br>
+        <div id="scoreDisplayId" style="display : none">
+            <label>Right : </label><input type="text" id="rightId"><br>
+            <label>Wrong : </label><input type="text" id="wrongId">
+        </div>
+        
+        <div id="displayQueId"></div>
+        <div id="addQueDivId" style="display : none">
+        Type a question : <input id="questionId" name="question" placeholder="Question?" type="text" ><br>
+        Answer : <input type="text" name="answer" id="answerId" placeholder="Answer"><br>
+        <input class="btn" type="button" value="Submit" id="submitBtnId"><br>
+        </div>
+
+        <input type="button" name="playButton" value="PLAY" id="playBtnId"><br>
+    </form>
+
+    <script>
+    $("#addQueBtnId").click(function(){
+
+        $("#addQueDivId").show();
+        $("#displayQueId").hide();
+        $("#addQueBtnId").hide();
+        $("#playBtnId").hide();
+    });
+
+    $("#scoreBtnId").click(function(){
+
+        $("#scoreDisplayId").show();
+        var url = "score";
+
+        $.ajax({
+            method: "GET",
+            url: "http://localhost:3000/"+url,
+            crossDomain : true,
+            dataType: "json"
+            })
+            .done(function(msg){
+                if(msg.answer == false){
+                    msg.answer = "false";
+                    }
+                console.log(msg);
+                $("#rightId").val(msg.right);
+                $("#wrongId").val(msg.wrong);
+            });
+    });
+
+
+    $(".btn").click(function(){
+        
+    var url = "question";
+    var question = $("#questionId").val();
+   // console.log(question);
+    var answer = $("#answerId").val();
+    //console.log(answer);
+
+    var data={
+        "question":question,
+        "answer":answer
+    }    
+    
+    var dataJSON = JSON.stringify(data);
+    console.log(dataJSON);
+    $.ajax({
+        method: "POST",
+        url: "http://localhost:3000/"+url,
+        crossDomain : true,
+        dataType: "json",
+        data: data 
+        })
+        .done(function( msg ) {
+
+        if(msg.answer==false){
+            msg.answer="false";
+        }
+        $("#displayQueId").show();
+        $("#addQueBtnId").show();
+        $("#addQueDivId").hide();
+
+        var displayQuestions = function(element, index, array){
+
+            //console.log(array);
+            var len = array.length;
+            console.log(len);
+            if(index == array.length - 1){
+
+                var $item = $('<div id="allQueId" class="btn">' +
+                            '<label>Question : </label><input type="text" name="que" id="queId'+ index +'"><br>' +
+                            '<label>Answer : </label><input type="text" name="ans" id="ansId"><br></div>' +
+                            '<input type="button" value="Send" id="sendBtnId'+ index + '">');
+
+                $("#displayQueId").append($item);
+                $("#queId" + index).val(array[index].question);
+            }
+
+        }
+
+        msg.forEach(displayQuestions);
+
+        });    
+    });
+
+    $("#playBtnId").click(function(){
+
+        var url = "question";
+
+        $.ajax({
+            method: "GET",
+            url: "http://localhost:3000/"+url,
+            crossDomain : true,
+            dataType: "json",
+            })
+            
+            .done(function( msg ) {
+
+                //console.log(msg);
+                if(msg.answer==false){
+                    msg.answer="false";
+                }
+                $("#allQueId").show();
+                $("#scoreBtnId").show();
+                $("#addQueBtnId").show();
+                $("#addQueDivId").hide();
+                $("#playBtnId").hide();
+
+            var displayQuestions = function(element, index, array){
+
+                var $item = $('<div id="allQueId" class="btn">' +
+                            '<label>Question : </label><input type="text" name="que" id="queId'+ index +'"><br>' +
+                            '<label>Answer : </label><input type="text" name="ans" id="ansId'+ index +'"><br></div>' +
+                            '<input type="button" value="Send" id="sendBtnId'+ index + '"><br>');
+
+                $("#displayQueId").append($item);
+             $("#queId" + index).val(array[index].question);
+
+            }
+
+            msg.forEach(displayQuestions);
+               /* var len = msg.length;
+                for(var i=0; i<len; i++){
+
+                    var $item = $('<div id="allQueId" class="btn">' +
+                            '<label>Question : </label><input type="text" name="que" id="queId'+ i +'"><br>' +
+                            '<label>Answer : </label><input type="text" name="ans" id="ansId"><br></div>' +
+                            '<input type="button" value="Send" id="sendBtnId'+ i + '"><br>' +
+                            '<input type="button" value="Previous" id="prevBtnId">' +
+                            '<input type="button" value="Skip" id="skipBtnId">');
+
+                    $("#displayQueId").append($item);
+                    //$("#queId" + i).val(array[i].question);
+                    /*console.log($("#sendBtnId"+i));
+                    if($("#sendBtnId" + i).click(function(){})){    
+                            console.log("Inside ifff......00");
+                        continue;
+                    }
+                }*/
+
+            var getAnswers = function(element, index, array){
+
+                $("#sendBtnId" + index).click(function(){
+
+                    var ans = $("#ansId" + index).val();
+                    var ansId = array[index]._id;
+                    var actualAns = array[index].answer;
+                    var url = "answer";
+
+                   // console.log(ans);
+                    //console.log(ansId);
+
+                    var data = {
+                        "answerId" : ansId,
+                        "possibleAns" : ans,
+                        "answer" : actualAns
+                    }
+                    var dataJSON = JSON.stringify(data);
+                   // console.log(JSON.stringify(data));
+                    $.ajax({
+
+                        method: "POST",
+                        url: "http://localhost:3000/"+url,
+                        crossDomain : true,
+                        dataType: "json",
+                        data : data
+                        })
+
+                        .done(function( msg ) {
+
+                            //console.log(msg);
+                            if(msg.answer==false){
+                                msg.answer="false";
+                            }
+
+
+                        })
+
+                });
+            }
+            msg.forEach(getAnswers);
+
+        });    
+    });
+
+    </script> 
+</body>
+</html>
