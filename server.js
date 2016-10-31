@@ -32,8 +32,6 @@ var url = 'mongodb://localhost:27017/gamedatabase';
 
 app.get('/question', function(req, res) {
 
-	//console.log("I  am inside get question");
-
     var findQuestions = function(db, callback) {
 
         var data = db.collection('gametable').find().toArray(function(err, documents) {
@@ -42,8 +40,7 @@ app.get('/question', function(req, res) {
         });
     };
     MongoClient.connect(url, function(err, db) {
-    	//db.collection('gametable').remove();
-        assert.equal(null, err);
+    	assert.equal(null, err);
         findQuestions(db, function() {});
     });
 });
@@ -53,13 +50,10 @@ app.post('/question', function(req, res) {
     var question = req.body["question"];
     var answer = req.body["answer"];
    
-    /*console.log("I am inside post function...........");
-    console.log(question);
-    console.log(answer);*/
     
     var insertDocument = function(db, callback) {
 
-    	//console.log("I am inside insertDocument..");
+    
 
     	db.collection('gametable').insert({
     		"question" : question,
@@ -76,18 +70,7 @@ app.post('/question', function(req, res) {
     MongoClient.connect(url, function(err, db) {
         assert.equal(null, err);
 
-        //console.log("Connection established.....");
-        /*db.collection('gametable', {}, function(err) {
-
-        	'gametable'.remove({}, function(err, result) {
-        		if(err){
-        			console.log(err);
-        		}
-        		console.log(result);
-        		console.log('collection removed');
-        	});
- 		});
-*/
+    
         insertDocument(db, function() {
             db.close();
         });

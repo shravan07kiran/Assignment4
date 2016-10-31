@@ -1,28 +1,92 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
-    <title>Assignment-4</title>
-    <script src=
-    "https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js">
-    </script>
+    <title>The Game</title>
+    <!-- /<link rel="stylesheet" type="text/css" href="style.css"> -->
+    <style>
+    #playBtnId{
+    
+      background-color: #48D1CC; 
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    border-radius: 12px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 50px;
+    float: center;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+     position: absolute;
+    top: 50%;
+    left:35%;
+
+    }
+    #submitBtnId{
+        text-align: center;
+        border-radius: 12px;
+        font-size: 20px;
+        background-color: #48D1CC;
+    }
+    #addQueBtnId{
+        text-align: center;
+        border-radius: 12px;
+        font-size: 20px;
+        background-color: #48D1CC;
+    }
+    #scoreBtnId{
+        text-align: center;
+        border-radius: 12px;
+        font-size: 20px;
+        background-color: #48D1CC;
+    }
+    #allQueId {
+        color:#FF4500;        
+
+    }
+    
+    #id1{
+        color:#FF4500;
+    }
+    #sendBtnId{
+         text-align: center;
+        border-radius: 12px;
+        font-size: 20px;
+        background-color: #48D1CC;
+    }
+    h1{
+        color:#48D1CC;
+        text-align: center;
+        font-size: 100px;
+        font-family: Arial Black ;
+    }
+    body {
+    background-color: black;
+    }
+    
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    
 </head>
 <body>
     <form>
+        <h1> Trivia Game </h1>
         <input type="button" name="score" value="Current Score" id="scoreBtnId" style="display:none">
         <input type="button" name="addButton" value="Add a question?" id="addQueBtnId" style="display:none"><br>
         <div id="scoreDisplayId" style="display : none">
-            <label>Right : </label><input type="text" id="rightId"><br>
-            <label>Wrong : </label><input type="text" id="wrongId">
+            <label id = id1>Right : </label><input type="text" id="rightId"><br>
+            <label id = id1>Wrong : </label><input type="text" id="wrongId">
         </div>
         
         <div id="displayQueId"></div>
         <div id="addQueDivId" style="display : none">
-        Type a question : <input id="questionId" name="question" placeholder="Question?" type="text" ><br>
-        Answer : <input type="text" name="answer" id="answerId" placeholder="Answer"><br>
+        
+        <label id = id1>Type a question :</label> <input id="questionId" name="question" placeholder="Question?" type="text" ><br>
+        <label id = id1>Answer :</label> <input type="text" name="answer" id="answerId" placeholder="Answer"><br>
         <input class="btn" type="button" value="Submit" id="submitBtnId"><br>
         </div>
 
-        <input type="button" name="playButton" value="PLAY" id="playBtnId"><br>
+        <input type="button" name="playButton" value="Start the game" id="playBtnId"><br>
     </form>
 
     <script>
@@ -95,9 +159,9 @@
             if(index == array.length - 1){
 
                 var $item = $('<div id="allQueId" class="btn">' +
-                            '<label>Question : </label><input type="text" name="que" id="queId'+ index +'"><br>' +
+                            '<label >Question : </label><input type="text" name="que" id="queId'+ index +'"><br>' +
                             '<label>Answer : </label><input type="text" name="ans" id="ansId"><br></div>' +
-                            '<input type="button" value="Send" id="sendBtnId'+ index + '">');
+                            '<input type="button" value="Send"'+ index + '">');
 
                 $("#displayQueId").append($item);
                 $("#queId" + index).val(array[index].question);
@@ -136,9 +200,9 @@
             var displayQuestions = function(element, index, array){
 
                 var $item = $('<div id="allQueId" class="btn">' +
-                            '<label>Question : </label><input type="text" name="que" id="queId'+ index +'"><br>' +
+                            '<br><label>Question : </label><input type="text" name="que" id="queId'+ index +'"><br>' +
                             '<label>Answer : </label><input type="text" name="ans" id="ansId'+ index +'"><br></div>' +
-                            '<input type="button" value="Send" id="sendBtnId'+ index + '"><br>');
+                            '<input type="button" value="Send" id="sendBtnId'+ index + '"><br><br>');
 
                 $("#displayQueId").append($item);
              $("#queId" + index).val(array[index].question);
@@ -146,24 +210,7 @@
             }
 
             msg.forEach(displayQuestions);
-               /* var len = msg.length;
-                for(var i=0; i<len; i++){
-
-                    var $item = $('<div id="allQueId" class="btn">' +
-                            '<label>Question : </label><input type="text" name="que" id="queId'+ i +'"><br>' +
-                            '<label>Answer : </label><input type="text" name="ans" id="ansId"><br></div>' +
-                            '<input type="button" value="Send" id="sendBtnId'+ i + '"><br>' +
-                            '<input type="button" value="Previous" id="prevBtnId">' +
-                            '<input type="button" value="Skip" id="skipBtnId">');
-
-                    $("#displayQueId").append($item);
-                    //$("#queId" + i).val(array[i].question);
-                    /*console.log($("#sendBtnId"+i));
-                    if($("#sendBtnId" + i).click(function(){})){    
-                            console.log("Inside ifff......00");
-                        continue;
-                    }
-                }*/
+               
 
             var getAnswers = function(element, index, array){
 

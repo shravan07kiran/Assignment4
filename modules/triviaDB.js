@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 
 mongoose.connect('mongodb://localhost/gamedatabase');
 
-// Create a movie schema
+// Create a game schema
 var gameSchema = mongoose.Schema({
     question: String,
     answer: String,
